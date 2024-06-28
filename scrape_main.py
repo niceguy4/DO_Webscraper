@@ -52,6 +52,8 @@ def webScrape(url: str) -> list:
         try:
             url_list = []
 
+            # custom userAgent settings
+            # settings for chrome
             userAgent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.114 Safari/537.36'
             options = Options()
             options.add_argument('--headless') 
@@ -64,16 +66,17 @@ def webScrape(url: str) -> list:
 
             driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
             
-            # Default set_page_load_timeout 300 seconds. Render timeout change
+            # Default set_page_load_timeout 300 seconds. Changed to 60
+            # Handles Render timeout error that normally timesout after 300 seconds
             driver.set_page_load_timeout(60)
+
             driver.get(url)
-            all_links = driver.find_elements(By.TAG_NAME, 'a')
+            allLinks = driver.find_elements(By.TAG_NAME, 'a')
             
-            # Searches for https:// links
-            # Does not add duplicate links to list
-            print(f'Dateime: {datetime.now()}')
+            # scrape links from target url and save
+            print(f'Datetime: {datetime.now()}')
             grab_count = 0 
-            for item in all_links:
+            for item in allLinks:
                 try:
                     item_get = (item.get_attribute('href'))
                     if (item_get) is not None:
@@ -83,18 +86,17 @@ def webScrape(url: str) -> list:
                                 url_list.append(item_get)
                                 #print(item.get_attribute('href'))
                 except Exception as e:
-                    print("except NEXT")
-                    print(f'href exception: {e}')
+                    print(f'webScrape() exception: {e}')
                     break
 
-             # It's a good practice to close the browser when done
+             # close chromedriver
             driver.quit()
             print(f'Grab URL Count: {str(grab_count)}')
             print(f'Grab Non-duplicate URL count: {str(len(url_list))}')
             scrapeLoop = False
         except Exception as e:
             f = open("error.log", "a")
-            f.write(f'\ndatetime.now(): {datetime.now()}\n')
+            f.write(f'\nDatetime.now(): {datetime.now()}\n')
             f.write(f'Error URL: {url}\n')
             f.write(str(e))
             f.close()
