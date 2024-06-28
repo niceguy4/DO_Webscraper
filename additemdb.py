@@ -8,3 +8,4 @@ cursor = conn.cursor()
 cursor.execute("""INSERT OR IGNORE INTO web (url, scraped) VALUES (?, ?)""", (item1, item2))
 conn.commit()
 conn.close()
+#
