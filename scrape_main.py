@@ -32,7 +32,7 @@ def create_database(db_name: str):
     ''')
     print("Table 'web' created")
 
-    # Commit the changes and close the connection.
+    # Commit the changes and close the connection.d
     conn.commit()
     conn.close()
     print(f"Database {db_name} closed")
