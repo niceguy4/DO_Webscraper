@@ -45,6 +45,7 @@ def startURL(startingURL: str, dbName: str):
     conn.commit()
     conn.close()
 
+# Grab all 'a' elements from target url & filter for https:// links
 def webScrape(url: str) -> list:
     scrapeLoop = True
     failCount = 0
